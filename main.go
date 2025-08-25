@@ -29,24 +29,24 @@ func main() {
 	outImg := image.NewRGBA(image.Rect(0, 0, outWidth, outHeight))
 
 	bounds := img.Bounds()
-    width, height := bounds.Max.X, bounds.Max.Y
-    stepWidth, stepHeight := width / outWidth, height / outHeight
+	width, height := bounds.Max.X, bounds.Max.Y
+	stepWidth, stepHeight := width/outWidth, height/outHeight
 
-    for y := 0; y < outHeight; y++ {
-        for x := 0; x < outWidth; x++ {
-            c := img.At(x * stepWidth, y * stepHeight)
-            r, g, b, _ := c.RGBA() // RGBA values are in the range [0, 65535]
-            // Process pixel data (e.g., convert to 0-255 range by dividing by 257)
-            r8, g8, b8 := uint8(r/257), uint8(g/257), uint8(b/257)
+	for y := range outHeight {
+		for x := range outWidth {
+			c := img.At(x*stepWidth, y*stepHeight)
+			r, g, b, _ := c.RGBA() // RGBA values are in the range [0, 65535]
+			// Process pixel data (e.g., convert to 0-255 range by dividing by 257)
+			r8, g8, b8 := uint8(r/257), uint8(g/257), uint8(b/257)
 
-            fmt.Println(r8, g8, b8 )
-            // TODO: Average of the area
-            avgRGB := color.RGBA{r8, g8, b8, 255}
-            outImg.Set(x, y, avgRGB)
-        }
-    }
+			fmt.Println(r8, g8, b8)
+			// TODO: Average of the area
+			avgRGB := color.RGBA{r8, g8, b8, 255}
+			outImg.Set(x, y, avgRGB)
+		}
+	}
 
-    // Set individual pixel colors (e.g., a green dot)
+	// Set individual pixel colors (e.g., a green dot)
 	green := color.RGBA{0, 255, 0, 255}
 	outImg.Set(4, 4, green)
 
