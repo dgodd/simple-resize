@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	_ "image/jpeg" // Import this to register the JPEG decoder
@@ -22,7 +21,7 @@ func main() {
 	}
 
 	// Define the image dimensions
-	outWidth, outHeight := 10, 10
+	outWidth, outHeight := 20, 20
 
 	// Create a new RGBA image (supports transparency)
 	// The image.Rect defines the bounds of the image
@@ -39,7 +38,6 @@ func main() {
 			// Process pixel data (e.g., convert to 0-255 range by dividing by 257)
 			r8, g8, b8 := uint8(r/257), uint8(g/257), uint8(b/257)
 
-			fmt.Println(r8, g8, b8)
 			// TODO: Average of the area
 			avgRGB := color.RGBA{r8, g8, b8, 255}
 			outImg.Set(x, y, avgRGB)
