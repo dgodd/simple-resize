@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	_ "image/jpeg" // Import this to register the JPEG decoder
@@ -20,16 +21,20 @@ func main() {
 		log.Fatal(err)
 	}
 
+	bounds := img.Bounds()
+	width, height := bounds.Max.X, bounds.Max.Y
+
 	// Define the image dimensions
-	outWidth, outHeight := 30, 20
+	outWidth := 20
+	outHeight := int(float64(height) / float64(width) * float64(outWidth))
+	stepWidth, stepHeight := width/outWidth, height/outHeight
+	fmt.Println("Original image dimensions:", width, "x", height)
+	fmt.Println("Output image dimensions:", outWidth, "x", outHeight)
+	fmt.Println("Steps:", stepWidth, "x", stepHeight)
 
 	// Create a new RGBA image (supports transparency)
 	// The image.Rect defines the bounds of the image
 	outImg := image.NewRGBA(image.Rect(0, 0, outWidth, outHeight))
-
-	bounds := img.Bounds()
-	width, height := bounds.Max.X, bounds.Max.Y
-	stepWidth, stepHeight := width/outWidth, height/outHeight
 
 	for y := range outHeight {
 		for x := range outWidth {
