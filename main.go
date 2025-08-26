@@ -21,7 +21,7 @@ func main() {
 	}
 
 	// Define the image dimensions
-	outWidth, outHeight := 20, 20
+	outWidth, outHeight := 30, 20
 
 	// Create a new RGBA image (supports transparency)
 	// The image.Rect defines the bounds of the image
