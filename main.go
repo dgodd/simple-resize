@@ -6,6 +6,7 @@ import (
 	_ "image/jpeg" // Import this to register the JPEG decoder
 	"image/png"
 	"log"
+	"math/big"
 	"os"
 )
 
@@ -33,13 +34,28 @@ func main() {
 
 	for y := range outHeight {
 		for x := range outWidth {
-			c := img.At(x*stepWidth, y*stepHeight)
-			r, g, b, _ := c.RGBA() // RGBA values are in the range [0, 65535]
-			// Process pixel data (e.g., convert to 0-255 range by dividing by 257)
-			r8, g8, b8 := uint8(r/257), uint8(g/257), uint8(b/257)
+			var sumRed, sumGreen, sumBlue big.Int
+			for offsetY := range stepHeight {
+				for offsetX := range stepWidth {
+					c := img.At(x*stepWidth + offsetX, y*stepHeight + offsetY)
+					r, g, b, _ := c.RGBA() // RGBA values are in the range [0, 65535]
+					// Process pixel data (e.g., convert to 0-255 range by dividing by 257)
+					r8, g8, b8 := uint8(r/257), uint8(g/257), uint8(b/257)
+
+					sumRed.Add(&sumRed, big.NewInt(int64(r8)))
+					sumGreen.Add(&sumGreen, big.NewInt(int64(g8)))
+					sumBlue.Add(&sumBlue, big.NewInt(int64(b8)))
+				}
+			}
 
 			// TODO: Average of the area
-			avgRGB := color.RGBA{r8, g8, b8, 255}
+			numValues := big.NewInt(int64(stepHeight)*int64(stepWidth))
+			avgRGB := color.RGBA{
+				uint8(sumRed.Div(&sumRed, numValues).Int64()),
+				uint8(sumRed.Div(&sumGreen, numValues).Int64()),
+				uint8(sumRed.Div(&sumBlue, numValues).Int64()),
+				255,
+			}
 			outImg.Set(x, y, avgRGB)
 		}
 	}
