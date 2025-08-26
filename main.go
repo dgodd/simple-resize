@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/jpeg"
 	_ "image/jpeg" // Import this to register the JPEG decoder
-	"image/png"
 	"log"
 	"os"
 )
@@ -54,14 +54,14 @@ func main() {
 	outImg.Set(4, 4, green)
 
 	// Create a file to save the image
-	file, err = os.Create("output.png")
+	file, err = os.Create("output.jpg")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
 
-	// Encode and save the image as PNG
-	err = png.Encode(file, outImg)
+	// Encode and save the image as JPG
+	err = jpeg.Encode(file, outImg, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
